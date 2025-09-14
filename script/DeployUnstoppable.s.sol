@@ -7,6 +7,8 @@ import {UnstoppableMonitor} from "../src/UnstoppableMonitor.sol";
 import {ERC20} from "solmate/tokens/ERC20.sol";
 import {DamnValuableToken} from "../DamnValuableToken.sol";
 
+uint256 constant TOKENS_IN_VAULT = 1_000_000e18;
+
 contract DeployUnstoppableVaultAndMonitor is Script {
     function run() external {
         vm.startBroadcast(); 
@@ -19,6 +21,9 @@ contract DeployUnstoppableVaultAndMonitor is Script {
 
         UnstoppableVault vault = new UnstoppableVault(ERC20(address(token)), owner, feeRecipient);
         console.log("UnstoppableVault deployed at:", address(vault));
+
+        token.approve(address(vault), TOKENS_IN_VAULT);
+        vault.deposit(TOKENS_IN_VAULT, owner);
 
         UnstoppableMonitor monitor = new UnstoppableMonitor(address(vault));
         console.log("UnstoppableMonitor deployed at:", address(monitor));
