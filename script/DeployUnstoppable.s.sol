@@ -19,11 +19,11 @@ contract DeployUnstoppableVaultAndMonitor is Script {
         address owner = msg.sender;
         address feeRecipient = msg.sender;
 
-        UnstoppableVault vault = new UnstoppableVault(ERC20(address(token)), owner, feeRecipient);
+        UnstoppableVault vault = new UnstoppableVault(token, owner, feeRecipient);
         console.log("UnstoppableVault deployed at:", address(vault));
 
         token.approve(address(vault), TOKENS_IN_VAULT);
-        vault.deposit(TOKENS_IN_VAULT, owner);
+        vault.deposit(TOKENS_IN_VAULT, address(owner));
 
         UnstoppableMonitor monitor = new UnstoppableMonitor(address(vault));
         console.log("UnstoppableMonitor deployed at:", address(monitor));
